@@ -1,3 +1,8 @@
+<!-- panvimdoc-ignore-start -->
+![GitHub License](https://img.shields.io/github/license/moyiz/perception.nvim)
+![GitHub Tag](https://img.shields.io/github/v/tag/moyiz/perception.nvim)
+<!-- panvimdoc-ignore-end -->
+
 # 🌃 perception.nvim
 
 Adjust current colorscheme by applying various color filters.
@@ -14,9 +19,12 @@ Adjust current colorscheme by applying various color filters.
 > Filter implementations and level ranges are subjected to change. Your
 > contribution is more than welcomed to tackle these inaccuracies.
 
+<!-- panvimdoc-ignore-start -->
+
 ## 📹 Demo
 [perception2.webm](https://github.com/user-attachments/assets/62698e3a-fb99-4d6b-a84c-5109e3885f1b)
 
+<!-- panvimdoc-ignore-end -->
 
 ## 🎨 Features
 - Fine-tune colorscheme using one or more builtin filters, or easily implement
@@ -186,7 +194,9 @@ a dedicated namespace for the modified highlight groups:
   highlight group.
 - Applying filters more than once (e.g. changing hue, applying inversion and
   luminance, then changing hue again). Workaround, add a new filter with
-  different priority that has the same `apply` method. 
+  different priority that has the same `apply` method.
+
+<!-- panvimdoc-ignore-start -->
 
 ## 🗒️ ToDo
 - Instead of persisting changes by generating a colorscheme, support exporting
@@ -199,3 +209,6 @@ a dedicated namespace for the modified highlight groups:
 
 ## 📜 License
 See [License](./LICENSE).
+
+<!-- panvimdoc-ignore-end -->
+<!-- vim: set textwidth=80: -->
