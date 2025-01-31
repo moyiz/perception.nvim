@@ -1,8 +1,9 @@
-# perception.nvim
+# 🌃 perception.nvim
 
 Apply various filters to customize the current colorscheme.
 
-> [!WARNING] This plugin is experimental. It saves a copy of the current
+> [!WARNING]
+> This plugin is experimental. It saves a copy of the current
 > colorscheme which will later be used as a base for applying color changing
 > filters. Some inconsistencies and weird color behaviour might occur. It was
 > not tested with other color modifying plugins.
@@ -14,7 +15,8 @@ Apply various filters to customize the current colorscheme.
 > contribution is more than welcomed to tackle these inaccuracies.
 
 ## 📹 Demo
-TBD
+[perception2.webm](https://github.com/user-attachments/assets/62698e3a-fb99-4d6b-a84c-5109e3885f1b)
+
 
 ## 🎨 Features
 - Fine-tune one or more builtin filters, or easily implement your own:
