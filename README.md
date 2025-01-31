@@ -1,6 +1,6 @@
 # 🌃 perception.nvim
 
-Apply various filters to customize the current colorscheme.
+Adjust current colorscheme by applying various color filters.
 
 > [!WARNING]
 > This plugin is experimental. It saves a copy of the current
@@ -19,7 +19,8 @@ Apply various filters to customize the current colorscheme.
 
 
 ## 🎨 Features
-- Fine-tune one or more builtin filters, or easily implement your own:
+- Fine-tune colorscheme using one or more builtin filters, or easily implement
+  your own:
   - Color levels.
   - Brightness.
   - Contrast.
@@ -33,7 +34,8 @@ Apply various filters to customize the current colorscheme.
   - Color inversion.
   - Grayscale.
 - Configurable priority to customize order of appliance.
-- Generate a new Lua colorscheme from the modified colors.
+- Export a new Lua colorscheme from the modified colors without ties to this
+  plugin.
 
 ## 🔨 Installation
 
@@ -51,16 +53,17 @@ Apply various filters to customize the current colorscheme.
 See [config.lua](./lua/perception/config.lua).
 
 ## 📘 Usage
-Colors can be adjusted by either using the builtin UI, or by invoking
+Color adjustments can be applied by either using the builtin UI, or by calling
 `require("perception").set(filter_name, value)`. A list of enabled filters can
 be obtained with `require("perception").list_filters()`.
 
 ### 🪟 UI
+- API: `require("pereption").ui:toggle()`
+- Command: `:PerceptionUI`
+
 A floating window (by default) containing a list of filter sliders, sorted by
-order of appliance. Simply call `:PerceptionUI` or
-`require("perception").ui:toggle()` and the UI window will appear. Navigate to
-the line of a filter to set (`<Down>` / `<Up>` / `j` / `k` / `/` / `t` / `f`
-/ other navigation keys). Default keys:
+order of appliance. Navigate to the line of a filter to change (`<Down>` / `<Up>`
+/ `j` / `k` / `/` / `t` / `f` / other navigation keys) and:
 - Press `h`/`<Left>` to reduce the current value by a per-filter pre-configured
   step. Prefixing the movement with a number will override the default step.
 - Press `l`/`<Right>` to increase the current value by a per-filter
@@ -70,20 +73,19 @@ the line of a filter to set (`<Down>` / `<Up>` / `j` / `k` / `/` / `t` / `f`
   value to 0.
 - Press `<NUM>-` to set current value to `-<NUM>`. Omitting `<NUM>` will set the
   value to 0.
-- Press `o` to save current colors as a new colorscheme.
+- Press `o` to export current highlight groups as a new colorscheme.
 - Press `q`/`<Esc>` to close the UI window.
 
-### 🎨 Generate Colorscheme
-Once you are satisfied with the color adjustments, it can be used to generate
-a standalone colorscheme (independent of `perception.nvim`).
+## 🎨 Export a Colorscheme
+- API: `require("perception").export_colorscheme(name)`
 
-```lua
-require("perception").generate_colorscheme("first")
-```
-It will generate a lua module in the default colors directory
-(`~/.config/nvim/colors/first.lua`), containing a bit of boilerplate and
-a `nvim_set_hl` call for each highlight group.
-At this point, `first` can be loaded as any other colorscheme.
+Once you are satisfied with the color adjustments, it can be used to generate
+
+Generates a lua module in the default colors directory
+(`~/.config/nvim/colors/<name>.lua`), containing a bit of boilerplate and
+a `nvim_set_hl` call for each highlight group. The generated module is
+a standalone colorscheme (independent of `perception.nvim`) and can be loaded as
+any other colorscheme.
 
 The method accepts the following parameters:
 - `name` - The name of the colorscheme, will be set to the lua module name.
@@ -92,45 +94,40 @@ The method accepts the following parameters:
   `"dark"` by default.
 - `termguicolors` - Optional. Whether to enable 24-bit RGB (default: true).
 
-## Custom Filters
-Additional custom filters can be defined and enabled via config. There are two
-relevant config sections: `base` and `filters`.
-`base` acts as a default / common ground for filter configuration. It will be
-merged and overridden by each filter specific configuration. See
-[Options](#TODO) for the default `base`.
-A filter configuration is an object defined in `config.filters`, mapping
-a filter name to its configuration object and consists the following fields:
-```lua
-```
+## 🛃 Custom Filters
+This plugin support adding custom color filters via its config.
+See [config.lua](./lua/perception/config.lua). `base` contains the default
+values for each filter configuration.
 
-Enabling a filter will add it to the ordered by priority list
-`config.state.ordering` and render its slider in the UI.
+Enabled filters are sorted by priority, and each will have its own slider
+rendered in the UI buffer.
 
 The actual implementation of the filter is defined in `apply` key of its
-configuration. It is basiaclly a Lua function with the following signature:
-```lua
----@param color perception.Color
----@param value number
----@return perception.Color
-```
-It receives a `Color` object (`color.lua`) and a value guaranteed to reside in
-the configured level range, and returns a (possibly) modified `Color` object.
-Note: The filter should not modify any color when applied for `default` value
-(tunable, defaults to `0`).
+configuration. 
 
-See `builtins.lua` for filter examples.
-See `config.lua` for the default filters configuration.
-See `utils.lua` for handy utilities.
+It receives a `perception.Color` object and a number `value` guaranteed to
+reside in the configured level range. It returns a (possibly) modified
+`perception.Color` object.
 
-### Examples
-Let's add some filters.
+> [!NOTE]
+> The filter should not modify any color when `value` is its `default` value
+> (tunable, defaults to `0`).
 
-#### 🎡 RGB Right Rotator
-Some imaginary example. Let's define a RGB Right Rotator as a filter that
-gradually rotates the RGB values of a color. Example: `#012345` will become
-`#450123` when fully rotated.
-The filter accepts a color and a range of `[0, 100]` that will indicate the
-percentage of color rotation,
+See [color.lua](./lua/perception/color.lua) for `perception.Color` object.
+
+See [builtins.lua](./lua/perception/builtins.lua) for filter function examples.
+
+See [config.lua](./lua/perception/config.lua) for the default filters
+configuration.
+
+
+### 🎡 Example - RGB Right Rotator
+Some imaginary example.
+
+Let's define a RGB Right Rotator as a filter that gradually rotates the RGB
+values of a color to the right. Example: `#012345` will become `#450123` when
+fully rotated. The filter accepts a color and a range of `[0, 100]` that will
+indicate the percentage of color rotation,
 
 ```lua
 {
@@ -140,16 +137,17 @@ percentage of color rotation,
       max = 100,
       step = 10
     },
-    priority = 30,
+    priority = 31,
     apply = function(color, value)
-      local truncate = require("perception.utils").truncate
+      local u = require "perception.utils"
       local r, g, b = unpack(color:as_rgb())
-      local rd = math.floor(r * value / 100)
-      local gd = math.floor(g * value / 100)
-      local bd = math.floor(b * value / 100)
-        truncate(r - rd + bd),
-        truncate(g - gd + rd),
-        truncate(b - bd + gd)
+      local rd = r * value / 100
+      local gd = g * value / 100
+      local bd = b * value / 100
+      return color:from_rgb(
+        u.truncate(u.round(r - rd + bd)),
+        u.truncate(u.round(g - gd + rd)),
+        u.truncate(u.round(b - bd + gd))
       )
     end,
   },
@@ -160,8 +158,8 @@ percentage of color rotation,
 - `priority` - A value of `31` places the filter just before the saturation
   filters.
 - `apply` - Since `value` is "percentage", we first calculate the relative
-  portiong of each color component, and then reduce it from the color itself and
-  adding the relative portion of the prior color.
+  portion of each color component. Then, reduce it from the color itself and
+  re-add it to the color component on its right.
 
 Tip: Consider increasing `{ ui = { floating_win_config = { height = N } } }` to
 match the number of enabled filters. Maybe it should be the default behaviour.
@@ -169,9 +167,9 @@ match the number of enabled filters. Maybe it should be the default behaviour.
 ## 🔬 Issues
 This plugin modifies highlight groups in the global namespace, rather than using
 a dedicated namespace. It holds the original highlight groups in a local
-variable, then uses it as a reference for applying the filters. This approach
-solved few pain points of the initial implementation that used a dedicated
-namespace for the modified highlight groups:
+variable, then uses each color as an initial value of the filter composition.
+This approach solves few pain points of the first implementation that used
+a dedicated namespace for the modified highlight groups:
 - Window specific namespaces. Some plugins manage their own namespace for
   highlight groups (e.g. `which-key.nvim`, `telescope`), which usually depend on
   highlight groups from the global namespace (linked highlight groups).
@@ -179,8 +177,11 @@ namespace for the modified highlight groups:
   with "no color" variations e.g. `NormalNC`, `StatusLineNC`).
 
 ## ⛓️  Limitations
-- `generate_colorscheme` currently dumps ALL highlight groups. The generated
-colorscheme is probably bigger than it has to be (~2k LOC, ~140KB).
+- `export_colorscheme` currently dumps ALL highlight groups. The generated
+  colorscheme is probably bigger than it has to be and depends on the number of
+  highlight groups defined in the base colorscheme and loaded plugins (for me:
+  ~2k LOC, ~140KB). With that in mind, exported colorschemes would miss
+  highlight groups that were added to your configuration after their generation.
 - Filters process each color individually and are not aware of the specific
   highlight group.
 - Applying filters more than once (e.g. changing hue, applying inversion and
@@ -190,10 +191,10 @@ colorscheme is probably bigger than it has to be (~2k LOC, ~140KB).
 ## 🗒️ ToDo
 - Instead of persisting changes by generating a colorscheme, support exporting
   filter states as perception profiles that can be loaded upon any colorscheme.
-- Improve `generate_colorscheme`. It currently dumps all highlight group, which
-  is probably unnecessary and gets quite big.
+- Improve `export_colorscheme` per the points stated in Limitations section.
 - Improve UI rendering (flickers when arrows are held).
-- Highlight UI widgets (in a dedicated namespace).
+- Highlight `PercetpionUI` sliders (in a dedicated namespace).
+- Save & restore filter profiles and states.
 - Tests.
 
 ## 📜 License
