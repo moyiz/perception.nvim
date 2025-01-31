@@ -229,7 +229,7 @@ end
 ---@param colors_dir? string Path to colors directory.
 ---@param background? "dark"|"light"|nil Background to set (default: "dark").
 ---@param termguicolors? boolean Enable 24-bit RGB (default: true).
-M.generate_colorscheme = function(name, colors_dir, background, termguicolors)
+M.export_colorscheme = function(name, colors_dir, background, termguicolors)
   colors_dir = colors_dir or vim.fn.stdpath "config" .. "/colors"
   background = background or "dark"
   termguicolors = termguicolors or true

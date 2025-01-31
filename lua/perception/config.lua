@@ -229,7 +229,7 @@ local config = {
       ["o"] = function()
         vim.ui.input({ prompt = "Save colorscheme as: " }, function(name)
           if name and name ~= "" then
-            require("perception").generate_colorscheme(name)
+            require("perception").export_colorscheme(name)
           end
         end)
       end,
