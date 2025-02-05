@@ -1,4 +1,4 @@
-*perception.txt*      For Neovim version 0.10     Last change: 2025 January 31
+*perception.txt*         For NVIM v0.8.0         Last change: 2025 February 05
 
 ==============================================================================
 Table of Contents                               *perception-table-of-contents*
